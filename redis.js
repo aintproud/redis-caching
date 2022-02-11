@@ -4,13 +4,33 @@ const client = redis.createClient({
 });
 
 (async () => {
-    await client.connect()
-    console.log(await client.ping())
-  await client.set("key", "value")
-  console.log(await client.get("key"))
-  console.log(await client.exists("key"))
-  console.log(await client.expire("key", 10))
-  console.log(await client.hSet("hkey", {'34433': 'pp'}))
-  console.log(await client.hGet("hkey", '1'))
-  setTimeout(async()=>console.log(await client.get("key")), 20000)
+  await client.connect()
+
+  .then(console.log(await client.ping()))
+
+  .then(console.log(await client.set("key", "value")))
+
+  .then(console.log(await client.get("key")))
+  
+  .then(console.log(await client.expire("key", 10)))
+
+  .then(console.log(await client.hSet("keyOfHash", {'firstKey': 'firstValue', 'secondKey': 'secondValue'}))) //0 if its already created
+
+  .then(console.log(await client.hGet("keyOfHash", 'firstKey')))
+
+  .then(console.log(await client.hKeys("keyOfHash")))
+
+  .then(console.log(await client.hLen("keyOfHash")))
+
+  .then(console.log(await client.HVALS("keyOfHash")))
+
+  .then(console.log(await client.hKeys("keyOfHash")))
+
+  .then(console.log(await client.hKeys("keyOfHash")))
+
+  .then(setTimeout(async()=>console.log(await client.keys("key")), 20000))//sync
+
+  .then(setInterval(async()=>console.log(await client.HVALS("keyOfHash")), 2000))//sync
+  
+  .then(setTimeout(async()=>console.log(await client.flushAll()), 30000))//sync
 })()
